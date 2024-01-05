@@ -1,0 +1,34 @@
+{
+  "name": "flaco rinaldi",
+  "age": "60",
+  "country": "peru"
+}
+
+{
+  "name": "juan rinaldi",
+  "age": "60",
+  "country": "argentina"
+}
+
+{
+  "name": "limpieza1",
+  "description": "living con odex",
+  "timeRequiredToComplete": 2
+}
+
+{
+  "name": "limpieza2",
+  "description": "living con ala",
+  "timeRequiredToComplete": 4
+}
+{
+  "name": "limpieza3",
+    "description": "living con zorro",
+  "timeRequiredToComplete": 5
+}
+
+{
+  "name": "limpieza4",
+    "description": "living con kolinos",
+  "timeRequiredToComplete": 4
+}
