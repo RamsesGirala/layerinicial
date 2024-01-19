@@ -3,9 +3,15 @@ package com.catedra.democatedra.business.facade.impl;
 import com.catedra.democatedra.business.facade.IUserFacade;
 import com.catedra.democatedra.business.mapper.UserDtoMapper;
 import com.catedra.democatedra.business.mapper.UserRequestMapper;
+import com.catedra.democatedra.business.mapper.UserValidatedDtoMapper;
+import com.catedra.democatedra.business.mapper.UserWithTaskDtoMapper;
 import com.catedra.democatedra.business.service.*;
 import com.catedra.democatedra.domain.dto.UserDto;
+import com.catedra.democatedra.domain.dto.UserValidatedDto;
+import com.catedra.democatedra.domain.dto.UserWithTaskDTO;
 import com.catedra.democatedra.domain.dto.request.UserRequest;
+import com.catedra.democatedra.domain.entity.Task;
+import com.catedra.democatedra.domain.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +25,8 @@ public class UserFacade implements IUserFacade {
     private final ITaskService iTaskService;
     private final UserRequestMapper userRequestMapper;
     private final UserDtoMapper userDtoMapper;
+    private final UserWithTaskDtoMapper userWithTaskDtoMapper;
+    private final UserValidatedDtoMapper userValidatedDtoMapper;
     private final UserValidateAvailabilityToAssignService userValidateAvailabilityToAssignService;
     private final UserSetValuesToUpdateService userSetValuesToUpdateService;
     private final UserValidateAvailabilityToDeleteService userValidateAvailabilityToDeleteService;
@@ -27,11 +35,13 @@ public class UserFacade implements IUserFacade {
                       ITaskService iTaskService,
                       UserRequestMapper userRequestMapper,
                       UserDtoMapper userDtoMapper,
-                      UserValidateAvailabilityToAssignService userValidateAvailabilityToAssignService, UserSetValuesToUpdateService userSetValuesToUpdateService, UserValidateAvailabilityToDeleteService userValidateAvailabilityToDeleteService) {
+                      UserWithTaskDtoMapper userWithTaskDtoMapper, UserValidatedDtoMapper userValidatedDtoMapper, UserValidateAvailabilityToAssignService userValidateAvailabilityToAssignService, UserSetValuesToUpdateService userSetValuesToUpdateService, UserValidateAvailabilityToDeleteService userValidateAvailabilityToDeleteService) {
         this.iUserService = iUserService;
         this.iTaskService = iTaskService;
         this.userRequestMapper = userRequestMapper;
         this.userDtoMapper = userDtoMapper;
+        this.userWithTaskDtoMapper = userWithTaskDtoMapper;
+        this.userValidatedDtoMapper = userValidatedDtoMapper;
         this.userValidateAvailabilityToAssignService = userValidateAvailabilityToAssignService;
         this.userSetValuesToUpdateService = userSetValuesToUpdateService;
         this.userValidateAvailabilityToDeleteService = userValidateAvailabilityToDeleteService;
@@ -94,6 +104,17 @@ public class UserFacade implements IUserFacade {
 
         iUserService.update(user);
 
+    }
+
+    public UserWithTaskDTO getUserAndTask(Long userId, Long taskId){
+        User user = iUserService.getById(userId);
+        Task task = iTaskService.getById(taskId);
+        return userWithTaskDtoMapper.toCombinedDto(user,task);
+    }
+
+    public UserValidatedDto getUserValidated(Long userId){
+        User user = iUserService.getById(userId);
+        return userValidatedDtoMapper.toDto(user);
     }
 
 }

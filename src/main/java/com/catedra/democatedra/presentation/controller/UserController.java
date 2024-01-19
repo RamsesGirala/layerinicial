@@ -3,6 +3,7 @@ package com.catedra.democatedra.presentation.controller;
 
 import com.catedra.democatedra.business.facade.IUserFacade;
 import com.catedra.democatedra.domain.dto.UserDto;
+import com.catedra.democatedra.domain.dto.UserValidatedDto;
 import com.catedra.democatedra.domain.dto.UserWithTaskDTO;
 import com.catedra.democatedra.domain.dto.request.UserRequest;
 import org.springframework.web.bind.annotation.*;
@@ -58,9 +59,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/{taskId}")
-    public UserWithTaskDTO getUserAndTask(){
-        
-        return new UserWithTaskDTO();
+    public UserWithTaskDTO getUserAndTask(@PathVariable Long userId,@PathVariable Long taskId){
+        return iUserFacade.getUserAndTask(userId,taskId);
+    }
+
+    @GetMapping("/isValid/{userId}")
+    public UserValidatedDto getUserValidated(@PathVariable Long userId){
+        return iUserFacade.getUserValidated(userId);
     }
 
 }

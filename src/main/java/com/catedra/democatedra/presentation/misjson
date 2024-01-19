@@ -11,6 +11,12 @@
 }
 
 {
+  "name": "pedro garcia",
+  "age": "17",
+  "country": "argentina"
+}
+
+{
   "name": "limpieza1",
   "description": "living con odex",
   "timeRequiredToComplete": 2
