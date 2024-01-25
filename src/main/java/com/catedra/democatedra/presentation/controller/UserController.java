@@ -34,6 +34,7 @@ public class UserController extends BaseControllerImpl<User,UserDto,Long, UserFa
         return iUserFacade.getUserValidated(userId);
     }
 
+    //REVISAR ESTO
     @Override
     public UserDto edit(UserDto entity) {
         return null;
