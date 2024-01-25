@@ -1,16 +1,12 @@
 package com.catedra.democatedra.business.service;
 
 
+import com.catedra.democatedra.domain.dto.TaskDto;
 import com.catedra.democatedra.domain.entity.Task;
+import com.catedra.democatedra.domain.entity.User;
 
 import java.util.List;
 
-public interface ITaskService {
-
-    Task create(Task request);
-    Task getById(Long id);
-    List<Task> getAll();
-    void deleteById(Long id);
-    Task update(Task request);
+public interface ITaskService extends BaseService<Task, TaskDto,Long>{
     List<Task> getByIds(List<Long> tasksIds);
 }

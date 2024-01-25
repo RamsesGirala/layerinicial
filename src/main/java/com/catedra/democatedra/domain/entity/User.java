@@ -16,11 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class User extends Base{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String name;
     private byte age;
     private String country;

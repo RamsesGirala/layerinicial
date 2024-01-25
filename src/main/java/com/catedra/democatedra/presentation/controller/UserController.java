@@ -2,61 +2,27 @@ package com.catedra.democatedra.presentation.controller;
 
 
 import com.catedra.democatedra.business.facade.IUserFacade;
+import com.catedra.democatedra.business.facade.impl.UserFacadeImpl;
 import com.catedra.democatedra.domain.dto.UserDto;
 import com.catedra.democatedra.domain.dto.UserValidatedDto;
 import com.catedra.democatedra.domain.dto.UserWithTaskDTO;
-import com.catedra.democatedra.domain.dto.request.UserRequest;
+import com.catedra.democatedra.domain.entity.User;
+import com.catedra.democatedra.presentation.controller.base.BaseControllerImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends BaseControllerImpl<User,UserDto,Long, UserFacadeImpl> {
 
     private final IUserFacade iUserFacade;
 
-    public UserController(IUserFacade iUserFacade) {
-
+    public UserController(IUserFacade iUserFacade,UserFacadeImpl facade) {
+        super(facade);
         this.iUserFacade = iUserFacade;
     }
 
-    @GetMapping("/{id}")
-    public UserDto getById(@PathVariable long id){
-
-        return iUserFacade.getById(id);
-    }
-
-    @GetMapping
-    public List<UserDto> getAll() {
-
-        return iUserFacade.getAll();
-    }
-
-    @PostMapping()
-    public UserDto create(@RequestBody UserRequest taskRequest){
-
-        return iUserFacade.createNew(taskRequest);
-    }
-
-    @PutMapping("/{id}")
-    public UserDto userEdit(@RequestBody UserRequest taskRequest,
-                            @PathVariable Long id){
-        return
-                iUserFacade.update(taskRequest, id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable Long id){
-
-        iUserFacade.deleteById(id);
-    }
-
-    @PostMapping("/{id}/tasks")
-    public void assignTasks(@PathVariable Long id ,
-                            @RequestParam List<Long> tasksIds){
-        iUserFacade.assignTasks(id, tasksIds);
-    }
 
     @GetMapping("/{userId}/{taskId}")
     public UserWithTaskDTO getUserAndTask(@PathVariable Long userId,@PathVariable Long taskId){
@@ -68,4 +34,8 @@ public class UserController {
         return iUserFacade.getUserValidated(userId);
     }
 
+    @Override
+    public UserDto edit(UserDto entity) {
+        return null;
+    }
 }

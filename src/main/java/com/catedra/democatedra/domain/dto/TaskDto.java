@@ -10,9 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TaskDto {
+public class TaskDto extends BaseDto {
 
-    private Long id;
     private String name;
     private String description;
     private int timeRequiredToComplete;

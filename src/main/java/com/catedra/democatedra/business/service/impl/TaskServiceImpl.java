@@ -2,11 +2,14 @@ package com.catedra.democatedra.business.service.impl;
 
 
 import com.catedra.democatedra.business.service.ITaskService;
-import com.catedra.democatedra.common.exeption.TaskException;
+import com.catedra.democatedra.common.exeption.UserException;
 import com.catedra.democatedra.common.util.constant.TaskConstant;
+import com.catedra.democatedra.domain.dto.TaskDto;
 import com.catedra.democatedra.domain.entity.Task;
+import com.catedra.democatedra.persistence.BaseRepository;
 import com.catedra.democatedra.persistence.TaskRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,57 +17,12 @@ import java.util.List;
 
 @Service
 @Transactional
-public class TaskServiceImpl implements ITaskService {
+public class TaskServiceImpl extends BaseServiceImpl<Task, TaskDto,Long> implements ITaskService {
 
-    private final TaskRepository taskRepository;
-
-    public TaskServiceImpl(TaskRepository taskRepository) {
-
-        this.taskRepository = taskRepository;
-    }
-
-    @Override
-    public Task create(Task request) {
-
-        request.setInitialValues();
-        return taskRepository.save(request);
-
-    }
-
-    @Override
-    public Task getById(Long id) {
-
-        return getTask(id);
-
-    }
-
-    private Task getTask(Long id) {
-
-        var optionalTask = taskRepository.findById(id);
-
-        if (optionalTask.isEmpty()){
-            throw new TaskException(HttpStatus.NOT_FOUND, String.format(TaskConstant.TASK_NOT_FOUND_MESSAGE_ERROR, id));
-        }
-
-        return optionalTask.get();
-    }
-
-    @Override
-    public List<Task> getAll() {
-        return taskRepository.findAll();
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
-        taskRepository.deleteById(id);
-    }
-
-    @Override
-    public Task update(Task task) {
-
-        return taskRepository.save(task);
-
+    @Autowired
+    private TaskRepository taskRepository;
+    public TaskServiceImpl(BaseRepository<Task, Long> baseRepository) {
+        super(baseRepository);
     }
 
     @Override
@@ -72,6 +30,13 @@ public class TaskServiceImpl implements ITaskService {
 
         return taskRepository.findByIdIn(tasksIds);
 
+    }
+
+    public void validateAvaliabilityToDelete(Task task) {
+        if(!task.getUsers().isEmpty()){
+            throw new UserException(HttpStatus.BAD_REQUEST,
+                    String.format(TaskConstant.CURRENT_TASK_NOT_ALLOW_TO_DELETE, task.getId()));
+        }
     }
 
 }

@@ -9,9 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserValidatedDto {
+public class UserValidatedDto extends BaseDto{
 
-    private Long id;
     private String name;
     private boolean puedeConducir;
 

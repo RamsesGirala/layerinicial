@@ -1,5 +1,6 @@
 package com.catedra.democatedra.domain.dto;
 
+import com.catedra.democatedra.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDto {
+public class UserDto extends BaseDto{
 
-    private Long id;
-    private String name;
-    private byte age;
-    private String country;
-
+    protected String name;
+    protected byte age;
+    protected String country;
 }

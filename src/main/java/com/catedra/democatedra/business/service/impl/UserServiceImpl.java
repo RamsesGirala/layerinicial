@@ -3,56 +3,42 @@ package com.catedra.democatedra.business.service.impl;
 import com.catedra.democatedra.business.service.IUserService;
 import com.catedra.democatedra.common.exeption.UserException;
 import com.catedra.democatedra.common.util.constant.UserConstant;
+import com.catedra.democatedra.domain.dto.UserDto;
+import com.catedra.democatedra.domain.entity.Task;
 import com.catedra.democatedra.domain.entity.User;
-import com.catedra.democatedra.persistence.UserRepository;
-import jakarta.transaction.Transactional;
+import com.catedra.democatedra.persistence.BaseRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
-@Transactional
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<User,UserDto,Long> implements IUserService {
 
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(BaseRepository<User, Long> baseRepository) {
+        super(baseRepository);
     }
 
-    @Override
-    public User create(User user) {
+    public void validateUserCanAssignService(List<Task> currentTasks, List<Task> tasksToDo){
+        var timeInCurrentTasks = currentTasks.stream()
+                .mapToInt(Task::getTimeRequiredToComplete)
+                .sum();
 
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User getById(Long id) {
-        var optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()){
-            throw new UserException(HttpStatus.NOT_FOUND,
-                    String.format(UserConstant.TASK_NOT_FOUND_MESSAGE_ERROR, id));
+        var timeInTasksToDo = tasksToDo.stream()
+                .mapToInt(Task::getTimeRequiredToComplete)
+                .sum();
+        var totalTimeInTasks = timeInCurrentTasks + timeInTasksToDo;
+        if(totalTimeInTasks > 8){
+            throw new UserException(HttpStatus.BAD_REQUEST,
+                    String.format(UserConstant.CURRENT_USER_NOT_ALLOW_TO_DO_TASKS, totalTimeInTasks));
         }
-
-        return optionalUser.get();
     }
 
-    @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public void validateAvaliabilityToDelete(User user){
+        if(!user.getTasks().isEmpty()){
+            throw new UserException(HttpStatus.BAD_REQUEST,
+                    String.format(UserConstant.CURRENT_USER_NOT_ALLOW_TO_DELETE, user.getName()));
+        }
     }
-
-    @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public User update(User user) {
-
-        return userRepository.save(user);
-    }
-
 }

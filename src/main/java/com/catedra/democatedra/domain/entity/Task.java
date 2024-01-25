@@ -17,11 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Task {
+public class Task extends Base{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     private String name;
     private String description;
     private boolean isCompleted;
@@ -36,10 +33,6 @@ public class Task {
             mappedBy = "tasks")
     @JsonIgnore
     private Set<User> users = new HashSet<>();
-
-    public Task(Long id) {
-        this.id = id;
-    }
 
     public void setInitialValues(){
         this.isCompleted = false;
