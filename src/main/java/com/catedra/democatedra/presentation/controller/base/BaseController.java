@@ -10,7 +10,7 @@ public interface BaseController <D extends BaseDto, ID extends Serializable>{
     D getById(ID id);
     List<D> getAll();
     D create(D entity);
-    D edit(D entity);
+    D edit(D entity, ID id);
     void deleteById(ID id);
 
 }

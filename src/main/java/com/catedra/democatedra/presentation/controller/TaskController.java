@@ -19,10 +19,4 @@ public class TaskController extends BaseControllerImpl<Task,TaskDto,Long,TaskFac
         super(facade);
     }
 
-    //REVISAR ESTO
-    @Override
-    public TaskDto edit(TaskDto entity) {
-        return null;
-    }
-
 }
